@@ -14,6 +14,31 @@ def DeepestCopy(container):
             new.add(item)
     return new
 
+def DeepestCopyIterative(container):
+    t = type(container)
+    if t == int or t == float or t == bool or t == str:
+        return container
+    new = t()
+    stack = []
+    stack.append(container)
+    while len(stack) > 0:
+        next_container = stack.pop()
+        t = type(next_container)
+        if t == int or t == float or t == bool or t == str:
+            return next_container
+        new = t()
+
+    if t == list or t == tuple:
+        for item in container:
+            new.append(DeepestCopy(item))
+    if t == dict:
+        for item in container:
+            new[item] = DeepestCopy(container[item])
+    if t == set:
+        for item in container:
+            new.add(item)
+    return new
+
 def test_list():
     x = []
     y = DeepestCopy(x)
