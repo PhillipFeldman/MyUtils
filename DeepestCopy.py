@@ -18,26 +18,40 @@ def DeepestCopyIterative(container):
     t = type(container)
     if t == int or t == float or t == bool or t == str:
         return container
-    new = t()
+    new_container = t()
     stack = []
-    stack.append(container)
+    stack.append((new_container,None))
     while len(stack) > 0:
-        next_container = stack.pop()
-        t = type(next_container)
-        if t == int or t == float or t == bool or t == str:
-            return next_container
-        new = t()
+        temp = stack.pop()
+        parent = temp[1]
+        parent_type = type(parent)
+        current= temp[0]
+        current_type = type(current)
+        current_copy = current_type()
 
-    if t == list or t == tuple:
-        for item in container:
-            new.append(DeepestCopy(item))
-    if t == dict:
-        for item in container:
-            new[item] = DeepestCopy(container[item])
-    if t == set:
-        for item in container:
-            new.add(item)
-    return new
+        if parent_type == list or parent_type == tuple:
+            parent.append(current)
+        if parent_type == dict:
+            for item in container:
+                new[item] = DeepestCopy(container[item])
+        if parent_type == set:
+            for item in container:
+                new.add(item)
+
+        if current_type == list or current_type == tuple:
+            for i in range(len(current)):
+                stack.append((current[i],
+
+                              +))
+        if current_type == dict:
+            for k in current.keys():
+                stack.append(((k,current[k]),current_copy))
+        if current_type == set:
+            l = list(current)
+            for i in range(len(l)):
+                stack.append(l[i],current_copy)
+
+
 
 def test_list():
     x = []
