@@ -7,23 +7,25 @@ class PrimitiveWrapper:
         return_wrapper: Whether the result of operations should return a builtin type or a wrapper around it
                         Be careful with non-symmetric return_wrapper
     """
-    def __init__(self,val,arithmetic_return_wrapper=False,conversion_return_wrapper=False):
+    def __init__(self,val,arithmetic_return_wrapper=False,conversion_return_wrapper=False
+                 ,arithmetic_with_assignment_modifies=True):
         if type(val) == PrimitiveWrapper:
             val = val.val
         assert type(val) in (int,float,bool,str) # You don't need this class otherwise
         self.val = val
         self.arithmetic_return_wrapper = arithmetic_return_wrapper
         self.conversion_return_wrapper = conversion_return_wrapper
+        self.arithmetic_with_assignment_modifies = arithmetic_with_assignment_modifies
 
     def arithmetic_wrap_or_not(self,val):
         if self.arithmetic_return_wrapper:
-            return PrimitiveWrapper(val)
+            return PrimitiveWrapper(val,self.arithmetic_return_wrapper,self.conversion_return_wrapper,self.arithmetic_with_assignment_modifies)
         else:
             return val
 
     def conversion_wrap_or_not(self,val):
         if self.conversion_return_wrapper:
-            return PrimitiveWrapper(val)
+            return PrimitiveWrapper(val,self.arithmetic_return_wrapper,self.conversion_return_wrapper,self.arithmetic_with_assignment_modifies)
         else:
             return val
 
@@ -130,3 +132,18 @@ class PrimitiveWrapper:
 
     def __neg__(self):
         return self.arithmetic_wrap_or_not(-self.val)
+
+
+    """Arithmetic with assignment, will either modify or return new, depending"""
+    def arithmetic_assignment_modify_or_not(self,val):
+        if self.arithmetic_with_assignment_modifies:
+            self.val=val
+            return self
+        else:
+            return self.arithmetic_wrap_or_not(val)
+
+    def __iadd__(self, other):
+        if isinstance(other,PrimitiveWrapper):
+            return self.arithmetic_assignment_modify_or_not(self.val + other.val)
+        return self.arithmetic_assignment_modify_or_not(self.val + other)
+

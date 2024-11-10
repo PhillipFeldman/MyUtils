@@ -50,3 +50,14 @@ class Test_pw_int(unittest.TestCase):
         self.assertEqual(y/w,2)
         self.assertEqual(x/y,5/6)
         self.assertEqual(x**y,5**6)
+
+    def test_arithmetic_with_assignment(self):
+        x = PrimitiveWrapper(5)
+        y = x
+        x+=1
+        self.assertEqual(x,6)
+        self.assertEqual(y,6)
+        z = PrimitiveWrapper(7,arithmetic_with_assignment_modifies=False)
+        w = z
+        z+=2
+        self.assertNotEqual(z,w)
