@@ -5,7 +5,7 @@ class PrimitiveWrapper:
         assert type(val) in (int,float,bool,str) # You don't need this class otherwise
         self.val = val
 
-    """Equality and hashing will be based on val at time of check.
+    """Equality, slicing, and hashing will be based on val at time of check.
     It is up to YOU to be careful with this.
     """
     def __eq__(self, other):
@@ -15,6 +15,9 @@ class PrimitiveWrapper:
 
     def __hash__(self):
         return hash(self.val)
+
+    def __index__(self):
+        return self.val
 
     def __str__(self):
         return str(self.val)
