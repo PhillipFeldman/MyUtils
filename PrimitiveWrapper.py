@@ -1,9 +1,31 @@
 class PrimitiveWrapper:
     """A wrapper around a primitive val that overloads
-    magic methods to simulate mutability of immutable types"""
-    def __init__(self,val):
+    magic methods to simulate mutability of immutable types
+
+    Params:
+        val: the value, eg: 5, True, "hello"
+        return_wrapper: Whether the result of operations should return a builtin type or a wrapper around it
+                        Be careful with non-symmetric return_wrapper
+    """
+    def __init__(self,val,arithmetic_return_wrapper=False,conversion_return_wrapper=False):
+        if type(val) == PrimitiveWrapper:
+            val = val.val
         assert type(val) in (int,float,bool,str) # You don't need this class otherwise
         self.val = val
+        self.arithmetic_return_wrapper = arithmetic_return_wrapper
+        self.conversion_return_wrapper = conversion_return_wrapper
+
+    def arithmetic_wrap_or_not(self,val):
+        if self.arithmetic_return_wrapper:
+            return PrimitiveWrapper(val)
+        else:
+            return val
+
+    def conversion_wrap_or_not(self,val):
+        if self.conversion_return_wrapper:
+            return PrimitiveWrapper(val)
+        else:
+            return val
 
     """Equality, slicing, and hashing will be based on val at time of check.
     It is up to YOU to be careful with this.
@@ -32,51 +54,51 @@ class PrimitiveWrapper:
     """Type conversion"""
 
     def __int__(self):
-        return int(self.val)
+        return self.conversion_wrap_or_not(int(self.val))
     def __float__(self):
-        return float(self.val)
+        return self.conversion_wrap_or_not(float(self.val))
 
     """Basic Arithmetic; should return a primitive type"""
 
     def __add__(self, other):
         if isinstance(other,PrimitiveWrapper):
-            return self.val + other.val
-        return self.val + other
+            return self.arithmetic_wrap_or_not(self.val + other.val)
+        return self.arithmetic_wrap_or_not(self.val + other)
 
     def __radd__(self, other):
         if isinstance(other,PrimitiveWrapper):
-            return self.val + other.val
-        return self.val + other
+            return self.arithmetic_wrap_or_not(self.val + other.val)
+        return self.arithmetic_wrap_or_not(self.val + other)
 
     def __sub__(self, other):
         if isinstance(other,PrimitiveWrapper):
-            return self.val - other.val
-        return self.val - other
+            return self.arithmetic_wrap_or_not(self.val - other.val)
+        return self.arithmetic_wrap_or_not(self.val - other)
 
     def __rsub__(self, other):
         if isinstance(other,PrimitiveWrapper):
-            return -( self.val - other.val)
-        return -( self.val - other)
+            return self.arithmetic_wrap_or_not(-( self.val - other.val))
+        return self.arithmetic_wrap_or_not(-( self.val - other))
 
     def __mul__(self, other):
         if isinstance(other,PrimitiveWrapper):
-            return self.val * other.val
-        return self.val * other
+            return self.arithmetic_wrap_or_not(self.val * other.val)
+        return self.arithmetic_wrap_or_not(self.val * other)
 
     def __rmul__(self, other):
         if isinstance(other,PrimitiveWrapper):
-            return self.val * other.val
-        return self.val * other
+            return self.arithmetic_wrap_or_not(self.val * other.val)
+        return self.arithmetic_wrap_or_not(self.val * other)
 
     def __truediv__(self,other):
         if isinstance(other,PrimitiveWrapper):
-            return self.val / other.val
-        return self.val / other
+            return self.arithmetic_wrap_or_not(self.val / other.val)
+        return self.arithmetic_wrap_or_not(self.val / other)
 
     def __pow__(self, power, modulo=None):
         if isinstance(power,PrimitiveWrapper):
-            return self.val.__pow__(power.val,modulo)
-        return self.val.__pow__(power,modulo)
+            return self.arithmetic_wrap_or_not(self.val.__pow__(power.val,modulo))
+        return self.arithmetic_wrap_or_not(self.val.__pow__(power,modulo))
 
 
     """Comparison operators"""
@@ -104,7 +126,7 @@ class PrimitiveWrapper:
     """Unary Operators"""
 
     def __pos__(self):
-        return +self.val
+        return self.arithmetic_wrap_or_not(+self.val)
 
     def __neg__(self):
-        return -self.val
+        return self.arithmetic_wrap_or_not(-self.val)

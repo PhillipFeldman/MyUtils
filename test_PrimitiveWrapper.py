@@ -21,10 +21,14 @@ class Test_pw_int(unittest.TestCase):
 
     def test_arrays(self):
         x = PrimitiveWrapper(-1)
-        arr = ['hello','world']
+        arr = ['hello','world','how','are','you']
         self.assertEqual(arr[x],arr[-1])
         x.val +=1
         self.assertEqual(arr[x],arr[0])
+        y = PrimitiveWrapper(4)
+        z = PrimitiveWrapper(2)
+        self.assertEqual(arr[x:y:z],arr[0:4:2])
+
 
     def test_type_conversion(self):
         x = PrimitiveWrapper(10)
