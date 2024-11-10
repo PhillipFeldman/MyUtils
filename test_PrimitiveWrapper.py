@@ -19,13 +19,21 @@ class Test_pw_int(unittest.TestCase):
         self.assertNotIn(x,s)
         self.assertNotEqual(x,y)
 
+    def test_arrays(self):
+        x = PrimitiveWrapper(-1)
+        arr = ['hello','world']
+        self.assertEqual(arr[x],arr[-1])
+
     def test_arithmetic(self):
         x = PrimitiveWrapper(5)
         y = PrimitiveWrapper(6)
         z = 7
+        w = PrimitiveWrapper(3)
         self.assertEqual(y-x,z-y)
         self.assertEqual(y - x, 1)
         self.assertEqual(x*y,30)
         self.assertEqual(x+y,11)
         self.assertTrue(x<y)
         self.assertTrue(x <= z)
+        self.assertEqual(y/w,2)
+        self.assertEqual(x**y,5**6)

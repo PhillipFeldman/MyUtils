@@ -54,6 +54,15 @@ class PrimitiveWrapper:
             return self.val * other.val
         return self.val * other
 
+    def __truediv__(self,other):
+        if isinstance(other,PrimitiveWrapper):
+            return self.val / other.val
+        return self.val / other
+
+    def __pow__(self, power, modulo=None):
+        if isinstance(power,PrimitiveWrapper):
+            return self.val.__pow__(power.val,modulo)
+        return self.val.__pow__(power,modulo)
 
 
     """Comparison operators"""
@@ -76,3 +85,12 @@ class PrimitiveWrapper:
         if isinstance(other,PrimitiveWrapper):
             return self.val <= other.val
         return self.val <= other
+
+
+    """Unary Operators"""
+
+    def __pos__(self):
+        return +self.val
+
+    def __neg__(self):
+        return -self.val
