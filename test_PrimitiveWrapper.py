@@ -23,6 +23,14 @@ class Test_pw_int(unittest.TestCase):
         x = PrimitiveWrapper(-1)
         arr = ['hello','world']
         self.assertEqual(arr[x],arr[-1])
+        x.val +=1
+        self.assertEqual(arr[x],arr[0])
+
+    def test_type_conversion(self):
+        x = PrimitiveWrapper(10)
+        y = int(x)
+        self.assertEqual(y,10)
+        self.assertFalse(isinstance(y,PrimitiveWrapper))
 
     def test_arithmetic(self):
         x = PrimitiveWrapper(5)
@@ -36,4 +44,5 @@ class Test_pw_int(unittest.TestCase):
         self.assertTrue(x<y)
         self.assertTrue(x <= z)
         self.assertEqual(y/w,2)
+        self.assertEqual(x/y,5/6)
         self.assertEqual(x**y,5**6)

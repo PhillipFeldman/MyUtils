@@ -19,11 +19,22 @@ class PrimitiveWrapper:
     def __index__(self):
         return self.val
 
+
+    """Representations"""
     def __str__(self):
         return str(self.val)
 
     def __repr__(self):
         return f'PrimitiveWrapper: {self.val}'
+
+
+
+    """Type conversion"""
+
+    def __int__(self):
+        return int(self.val)
+    def __float__(self):
+        return float(self.val)
 
     """Basic Arithmetic; should return a primitive type"""
 
